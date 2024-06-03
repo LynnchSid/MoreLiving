@@ -1,22 +1,26 @@
 from django.db import models
+from Restaurant.models import Restaurant
 
-# Create your models here.
+class MenuItemType(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
-    amount = models.CharField(max_length=50)  # e.g., "200g", "2 tsp", etc.
+    amount = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.amount})"
 
-class Dish(models.Model):
+class MenuItem(models.Model):
+    restaurant = models.ForeignKey(Restaurant, related_name='menu_items', on_delete=models.CASCADE)
+    type = models.ForeignKey(MenuItemType, related_name='menu_items', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    ingredients = models.ManyToManyField(Ingredient, through='DishIngredient')
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    ingredients = models.ManyToManyField(Ingredient, related_name='menu_items')
 
     def __str__(self):
         return self.name
-
-class DishIngredient(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    quantity = models.CharField(max_length=50)  # Quantity used in the dish

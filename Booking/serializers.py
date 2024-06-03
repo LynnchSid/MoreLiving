@@ -15,3 +15,17 @@ class BookingSerializer(serializers.ModelSerializer):
         if value < current_date:
             raise serializers.ValidationError("Booking date cannot be in the past.")
         return value
+    def validate(self, data):
+        table = data.get('table')
+        number_of_adults = data.get('number_of_adults')
+        number_of_children = data.get('number_of_children')
+        total_guests = number_of_adults + number_of_children
+
+        if total_guests > table.seats:
+            raise serializers.ValidationError(f"Cannot book table {table.number} as it has only {table.seats} seats available.")
+
+        return data
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)

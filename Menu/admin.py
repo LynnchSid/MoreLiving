@@ -1,13 +1,14 @@
 from django.contrib import admin
-from .models import Dish
-from .models import DishIngredient
-from .models import Ingredient
+from .models import MenuItem, MenuItemType, Ingredient
+
 
 
 # Register your models here.
-admin.site.register(Dish)
-admin.site.register(DishIngredient)
+admin.site.register(MenuItem)
+admin.site.register(MenuItemType)
 admin.site.register(Ingredient)
+
+
 
 
 

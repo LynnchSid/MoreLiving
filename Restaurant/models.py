@@ -10,7 +10,6 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, related_name='restaurants', on_delete=models.CASCADE)
     description = models.TextField()
-    image = models.ImageField(upload_to='media/restaurants_images')
     location = models.CharField(max_length=100)
     phoneNumber = models.CharField(max_length=100)
     delivery=models.BooleanField(default=False)
@@ -20,3 +19,10 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return self.name
+    
+class RestaurantImage(models.Model):
+    restaurant = models.ForeignKey(Restaurant, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='media/restaurants_images')
+
+    def __str__(self):
+        return f"Image for {self.restaurant.name}"
