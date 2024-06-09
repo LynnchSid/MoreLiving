@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 class BaseAPIView(APIView):
     serializer_class = None
     queryset = None
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         return {'request': self.request}

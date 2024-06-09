@@ -1,14 +1,17 @@
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Ingredient, MenuItemType, MenuItem
 from .serializers import MenuItemTypeSerializer, IngredientSerializer, MenuItemSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
 
 class BaseAPIView(APIView):
     serializer_class = None
     queryset = None
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = []  # Initialize as an empty list
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -18,6 +21,9 @@ class BaseAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset().all()
+        # Apply filters
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self)
         serializer = self.serializer_class(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
@@ -89,6 +95,7 @@ class MenuItemTypeListCreate(BaseAPIView):
 class MenuItemListCreate(BaseAPIView):
     serializer_class = MenuItemSerializer
     queryset = MenuItem.objects.all()
+    filterset_fields = ['restaurant', 'type', 'name', 'price', 'description', 'ingredients__name']  # Adjusted fields
 
     def get_queryset(self):
         restaurant_id = self.request.query_params.get('restaurant_id')

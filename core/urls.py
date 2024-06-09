@@ -30,4 +30,6 @@ urlpatterns = [
     path ('notification/', include('Notification.urls')),
     path ('menu/', include('Menu.urls')),
     path ('analytics/', include('Analytics.urls')),
+    path ('order/',include ('Ordering.urls')),
+    path('cart/',include('Cart.urls')),
 ]

@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Category, Restaurant, RestaurantImage
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
-from .pagination import CustomPagination
+from core.utils.pagination import CustomPagination
 
 
 

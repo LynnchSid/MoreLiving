@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Notification
+from Notification.models import Notification
 from Booking.models import Booking
-from Notification.notifications import send_booking_confirmation, send_review_request
+from core.utils.notifications import send_booking_confirmation, send_review_request
 from Notification.models import Notification
 
 @receiver(post_save, sender=Booking)

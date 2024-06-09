@@ -1,4 +1,4 @@
-from .models import  Notification
+from Notification.models import  Notification
 from Booking.models import Booking
 from django.utils import timezone
 from datetime import timedelta
