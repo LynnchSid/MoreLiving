@@ -5,7 +5,8 @@ from django.utils import timezone
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
          model = Booking
-         fields = ['id', 'user', 'restaurant', 'table', 'bookingDate','bookingTime', 'number_of_adults','number_of_children','total_guests','created_at']
+         fields = ['id', 'user', 'restaurant', 'table', 'bookingDate','bookingTime', 'number_of_adults','number_of_children','total_guests','payment_status', 'stripe_charge_id','created_at']
+         read_only_fields = ['payment_status', 'stripe_charge_id']
 
     def get_total_guests(self, obj):
         return obj.number_of_adults+obj.number_of_children

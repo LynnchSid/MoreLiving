@@ -17,7 +17,7 @@ class BaseAPIView(APIView):
     permission_classes = []
     parser_classes = [MultiPartParser, FormParser]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['location','delivery']
+    filterset_fields = None
     pagination_class = CustomPagination
     
 
@@ -40,6 +40,7 @@ class BaseAPIView(APIView):
 class CategoryListCreate(BaseAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+  
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context=self.get_serializer_context())

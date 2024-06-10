@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-!jh)fn!%4od21)q#c*p(brl-ah!4^x&*!ok-0h9g5i=is+0xaj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.97']
 MEDIA_URL= '/media/'
 MEDIA_ROOT =os.path.join(BASE_DIR, 'media')
 
@@ -37,6 +37,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 # Application definition
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,7 +66,8 @@ INSTALLED_APPS = [
     'Review',
     'Menu',
     'Ordering',
-    'Cart'
+    'Cart',
+    'drf_yasg'
 ]
 SITE_ID = 1
 
@@ -188,6 +190,81 @@ USE_TZ = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
+# Stripe settings
+STRIPE_SECRET_KEY = 'sk_test_51PQ1dDP3wYZyfN0qE4e91zBfmvALC2MBterd9brqnTcH3lnlqOg6oa8KtSgZMIFHwpz3MtvWr2sieY5grNoYw46300I36yCLHE'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51PQ1dDP3wYZyfN0qFIW4YFMJ6leycIkFjlbIwPYTdR5AVns9dDB9Ri8rsk0FKHx0rtCCNPwCh1ZjMlZ0efACJAE800CCU5Li2H'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Restaurant Admin",
+    "site_header": "",
+    "site_brand": "MoreLiving",
+    "site_logo": "images/logo.png",  # Path to your logo
+    "welcome_sign": "Welcome to the Restaurant Admin Panel",
+    "copyright": "Restaurant Admin",
+    "search_model": "auth.User",
+    "user_avatar": None,
+
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "auth.User"},
+        {"app": "auth"},
+    ],
+
+    "usermenu_links": [
+        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
+    ],
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "order_with_respect_to": ["auth", "Booking", "Ordering", "Menu", "Restaurant"],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "Booking": "fas fa-calendar-check",
+        "Ordering": "fas fa-shopping-cart",
+        "Menu": "fas fa-utensils",
+        "Restaurant": "fas fa-store",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+    "show_ui_builder": True,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "simplex",
+    "dark_mode_theme": None,
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "cosmo",
+    "dark_mode_switch": True,
+    "dark_mode_theme": None,
+    "small_text": False,
+    "card_header_fix": False,
+    "sidebar_nav_child_indent": False,
+    "brand_color": False,
+    "accent": "accent-primary",
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "brand_small_text": False,
+}
+
+
 
 
 
