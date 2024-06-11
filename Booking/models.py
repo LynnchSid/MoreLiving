@@ -14,6 +14,9 @@ class Booking(models.Model):
     number_of_adults = models.IntegerField(validators=[MinValueValidator(1)])
     number_of_children = models.IntegerField(validators=[MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)
+    payment_status = models.CharField(max_length=20, default='pending')
+    stripe_charge_id = models.CharField(max_length=50, blank=True, null=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
     @property
     def total_guests(self):

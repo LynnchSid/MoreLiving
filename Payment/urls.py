@@ -1,7 +1,8 @@
-from django.urls import path 
-from  .views import PaymentListCreate, PaymentDetail
+from django.urls import path
+from .views import CreatePaymentIntentView, ConfirmPaymentForBookingView, ConfirmPaymentForOrderView
 
 urlpatterns = [
-    path('payments/',PaymentListCreate.as_view(),name='payment-list-create'),
-    path('payments/<int:pk>/',PaymentDetail.as_view(),name='payment-detail'),
+    path('create-payment-intent/', CreatePaymentIntentView.as_view(), name='create-payment-intent'),
+    path('confirm-payment-booking/', ConfirmPaymentForBookingView.as_view(), name='confirm-payment-booking'),
+    path('confirm-payment-order/', ConfirmPaymentForOrderView.as_view(), name='confirm-payment-order'),
 ]

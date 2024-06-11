@@ -1,6 +1,12 @@
 from django.contrib import admin
-from .models import Restaurant,Category
+from .models import Category, Restaurant, RestaurantImage
 
-# Register your models here.
-admin.site.register(Restaurant)
+class RestaurantImageInline(admin.TabularInline):
+    model = RestaurantImage
+    extra = 1
+
+class RestaurantAdmin(admin.ModelAdmin):
+    inlines = [RestaurantImageInline]
+
 admin.site.register(Category)
+admin.site.register(Restaurant, RestaurantAdmin)

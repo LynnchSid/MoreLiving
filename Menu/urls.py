@@ -1,9 +1,7 @@
 from django.urls import path
-from .views import (DishListCreateAPIView,DishRetrieveUpdateDestroyAPIView,IngredientListCreateAPIView, IngredientRetrieveUpdateDestroyAPIView)
+from .views import MenuItemTypeListCreate, MenuItemListCreate
 
 urlpatterns = [
-    path('dishes/', DishListCreateAPIView.as_view(), name='dish-list-create'),
-    path('dishes/<int:pk>/', DishRetrieveUpdateDestroyAPIView.as_view(), name='dish-detail'),
-    path('ingredients/', IngredientListCreateAPIView.as_view(), name='ingredient-list-create'),
-    path('ingredients/<int:pk>/', IngredientRetrieveUpdateDestroyAPIView.as_view(), name='ingredient-detail'),
+    path ('menu-item-types/', MenuItemTypeListCreate.as_view(), name='menu-item-type-list-create'),
+    path ('menu-items/', MenuItemListCreate.as_view(), name='menu-item-list-create'),
 ]

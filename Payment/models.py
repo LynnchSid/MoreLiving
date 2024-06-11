@@ -1,11 +1,14 @@
+
 from django.db import models
-from Booking.models import Booking
+from django.conf import settings
 
-
-# Create your models here.
 class Payment(models.Model):
-    booking = models.ForeignKey(Booking,related_name='payments', on_delete=models.CASCADE)
-    amount = models.FloatField()
-    payment_date = models.DateField()
-    payment_time = models.TimeField()
-    status = models.BooleanField(default =False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    stripe_charge_id = models.CharField(max_length=50)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'Payment {self.id} - {self.amount}'
+

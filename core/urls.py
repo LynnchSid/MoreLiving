@@ -7,6 +7,22 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
+        title="Restaurant API",
+        default_version='v1',
+        description="API documentation for the Restaurant project",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@restaurant.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
         title="Hotel Booking API",
         default_version='v1',
         description="Test description",
@@ -30,6 +46,10 @@ urlpatterns = [
     path ('payment/', include('Payment.urls')),
     path ('notification/', include('Notification.urls')),
     path ('menu/', include('Menu.urls')),
+    path ('analytics/', include('Analytics.urls')),
+    path ('order/',include ('Ordering.urls')),
+    path('cart/',include('Cart.urls')),
+    
     path('hotel/', include('Hotel.urls')),
     path('room/', include('Room.urls')),
     path('roombooking/', include('Roombooking.urls')),

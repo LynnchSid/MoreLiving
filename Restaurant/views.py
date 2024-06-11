@@ -1,11 +1,13 @@
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .serializers import CategorySerializer, RestaurantSerializer
+from rest_framework.permissions import  IsAdminUser
+from .serializers import CategorySerializer, RestaurantSerializer, RestaurantImageSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Category, Restaurant
+from .models import Category, Restaurant, RestaurantImage
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from core.utils.pagination import CustomPagination
 
 
 
@@ -14,6 +16,10 @@ class BaseAPIView(APIView):
     queryset = None
     permission_classes = []
     parser_classes = [MultiPartParser, FormParser]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = None
+    pagination_class = CustomPagination
+    
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -23,13 +29,18 @@ class BaseAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset().all()
-        serializer = self.serializer_class(queryset, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
-
+        # Apply filters
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self) 
+        paginator = self.pagination_class()
+        paginated_queryset = paginator.paginate_queryset(queryset, request)
+        serializer = self.serializer_class(paginated_queryset, many=True, context=self.get_serializer_context())
+        return paginator.get_paginated_response(serializer.data)
 
 class CategoryListCreate(BaseAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+  
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context=self.get_serializer_context())
@@ -119,3 +130,37 @@ class RestaurantDetail(BaseAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class RestaurantImageListCreate(BaseAPIView):
+    serializer_class = RestaurantImageSerializer
+    queryset = RestaurantImage.objects.all()
+    permission_classes = [IsAdminUser]
+
+    def post(self, request, *args, **kwargs):   
+        serializer = self.serializer_class(data=request.data, context=self.get_serializer_context())
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class RestaurantImageDetail(BaseAPIView):
+    serializer_class = RestaurantImageSerializer
+    queryset = RestaurantImage.objects.all()
+    permission_classes = [IsAdminUser]
+
+    def delete(self, request, pk, *args, **kwargs):
+        try:
+            image = self.get_object()
+            image.delete()
+            return Response({"message": "Image deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        except Restaurant.DoesNotExist:
+            return Response({"error": "Image not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+    def patch(self, request, *args, **kwargs):
+        image = self.get_object()
+        serializer = self.serializer_class(image, data=request.data, partial=True, context=self.get_serializer_context())
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

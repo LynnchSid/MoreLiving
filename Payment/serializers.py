@@ -1,8 +1,11 @@
 from rest_framework import serializers
-from .models import Payment
+from Booking.models import Booking
+from Ordering.models import Order
 
+class CreatePaymentIntentSerializer(serializers.Serializer):
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
 
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = ['booking', 'amount', 'payment_date', 'payment_time', 'status']
+class ConfirmPaymentSerializer(serializers.Serializer):
+    payment_intent_id = serializers.CharField(max_length=255)
+    booking_id = serializers.IntegerField(required=False)
+    order_id = serializers.IntegerField(required=False)

@@ -1,15 +1,16 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import NotificationSerializer
-from .models import Notification
 from rest_framework.permissions import IsAuthenticated
+from .models import Notification
+from .serializers import NotificationSerializer
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.views import APIView
 
-# Create your views here.
 class BaseAPIView(APIView):
     serializer_class = None
     queryset = None
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -29,23 +30,9 @@ class NotificationListCreate(BaseAPIView):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context=self.get_serializer_context())
         if serializer.is_valid():
-            self.perform_create(serializer)
-            response_data = {
-                "success": True,
-                "message": "Notification has been created.",
-                "data": serializer.data
-            }
-            return Response(response_data, status=201)
-        else:
-            response_data = {
-                "success": False,
-                "message": "Invalid data",
-                "errors": serializer.errors
-            }
-            return Response(response_data, status=400)
+            serializer.save(user=self.request.user)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
