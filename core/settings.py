@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-!jh)fn!%4od21)q#c*p(brl-ah!4^x&*!ok-0h9g5i=is+0xaj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','192.168.1.99']
 MEDIA_URL= '/media/'
 MEDIA_ROOT =os.path.join(BASE_DIR, 'media')
 
@@ -34,9 +34,11 @@ STATIC_URL= '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,6 +63,10 @@ INSTALLED_APPS = [
     'OpeningHours',
     'Review',
     'Menu',
+    'Hotel',
+    'Roombooking',
+    'Room',
+    'drf_yasg',
 
 ]
 
@@ -164,3 +170,77 @@ USE_TZ = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
+JAZZMIN_SETTINGS = {
+    "site_title": "Hotel Admin",
+    "site_header": "Hotel Administration",
+    "site_brand": "Hotel",
+    "site_logo": "images/logo.png",  # Path to your logo
+    "welcome_sign": "Welcome to the Hotel Admin Panel",
+    "copyright": "Hotel Admin",
+    "search_model": "auth.User",
+    "user_avatar": None,
+
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "auth.User"},
+        {"app": "auth"},
+    ],
+
+    "usermenu_links": [
+        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
+    ],
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "order_with_respect_to": ["auth", "Booking", "Ordering", "Menu", "Restaurant"],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "Booking": "fas fa-calendar-check",
+        "Ordering": "fas fa-shopping-cart",
+        "Menu": "fas fa-utensils",
+        "Restaurant": "fas fa-store",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+    "show_ui_builder": True,
+}
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-indigo",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-navy",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "pulse",
+    "dark_mode_theme": "solar",
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "dark_mode_switch": True,
+    "small_text": False,
+    "card_header_fix": False,
+    "brand_color": False
+}
